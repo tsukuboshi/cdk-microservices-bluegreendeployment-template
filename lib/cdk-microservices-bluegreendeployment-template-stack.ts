@@ -18,7 +18,6 @@ import * as ecrdeploy from "cdk-ecr-deployment";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as ecs_patterns from "aws-cdk-lib/aws-ecs-patterns";
 import * as elbv2 from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import * as targets from "aws-cdk-lib/aws-elasticloadbalancingv2-targets";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as logs from "aws-cdk-lib/aws-logs";
 import * as path from "path";
@@ -75,6 +74,14 @@ export class CdkMicroservicesBluegreendeploymentTemplateStack extends Stack {
       vpc: vpc,
     });
 
+    // Create Second Target Group
+    const targetGroup2 = new elbv2.ApplicationTargetGroup(this, "TargetGroup", {
+      vpc: vpc,
+      port: 80,
+      protocol: elbv2.ApplicationProtocol.HTTP,
+      targetType: elbv2.TargetType.IP,
+    });
+
     // Create CloudWatch Log Group
     const logGroup = new logs.LogGroup(this, "LogGroup", {
       logGroupName: `/aws/ecs/${resourceName}`,
@@ -110,14 +117,6 @@ export class CdkMicroservicesBluegreendeploymentTemplateStack extends Stack {
       }
     );
 
-    // Create Second Target Group
-    const targetGroup2 = new elbv2.ApplicationTargetGroup(this, "TargetGroup", {
-      vpc: vpc,
-      port: 80,
-      protocol: elbv2.ApplicationProtocol.HTTP,
-      targetType: elbv2.TargetType.IP,
-    });
-
     // Create Second Listener
     const listener2 = service.loadBalancer.addListener("Listener2", {
       port: 8080,
@@ -131,10 +130,10 @@ export class CdkMicroservicesBluegreendeploymentTemplateStack extends Stack {
       "CodeCommitRepo",
       {
         repositoryName: `${resourceName}-codecommit-repo`,
-        // code: codecommit.Code.fromDirectory(
-        //   path.join(__dirname, "..", "app"),
-        //   "main"
-        // ),
+        code: codecommit.Code.fromDirectory(
+          path.join(__dirname, "..", "app"),
+          "main"
+        ),
       }
     );
 
