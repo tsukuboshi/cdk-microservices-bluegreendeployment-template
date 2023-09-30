@@ -131,10 +131,10 @@ export class CdkMicroservicesBluegreendeploymentTemplateStack extends Stack {
       "CodeCommitRepo",
       {
         repositoryName: `${resourceName}-codecommit-repo`,
-        code: codecommit.Code.fromDirectory(
-          path.join(__dirname, "..", "app"),
-          "main"
-        ),
+        // code: codecommit.Code.fromDirectory(
+        //   path.join(__dirname, "..", "app"),
+        //   "main"
+        // ),
       }
     );
 
