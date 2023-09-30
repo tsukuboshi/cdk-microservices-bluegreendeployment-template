@@ -29,7 +29,7 @@ git clone https://github.com/tsukuboshi/cdk-microservices-bluegreendeployment-te
 2. Change directory.
 
 ```shell
-cd cdk-microservices-template
+cd cdk-microservices-bluegreendeployment-template
 ```
 
 3. Install npm packages.
